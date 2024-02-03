@@ -6,27 +6,31 @@ export default function Vans() {
     React.useEffect(() => {
       fetch('/api/vans')
         .then(res => res.json())
-        .then(data => setVans(data.vans))
+        .then(data => {
+            setVans(data.vans)
+            console.log(data.vans)
+        })
+        .catch(error => console.log('Error fetching vans:', error))
     }, [])
 
-    const vanList = vans.map(van => {
-        return (
-            <div key={van.id} className="van-title">
+    const vanElements = vans.map(van => (
+        <div key={van.id} className="van-title">
+            <Link to={`/vans/${van.id}`}>
                 <img src={van.imageUrl} alt={van.name} />
                 <div className="van-info">
                     <h3>{van.name}</h3>
                     <p>${van.price}<span>/day</span></p>
                 </div>
-                <i className={`van type ${van.type} selected`}>{van.type}</i>
-            </div>
-        )
-    })
+                <i className={`van-type ${van.type} selected`}>{van.type}</i>
+            </Link>
+        </div>
+    ))
 
     return (
-        <div className="vans-page-container">
-            <h1>Vans page goes here</h1>
-            <div className="vans-list">
-                {vanList}
+        <div className="van-list-container">
+            <h1>Explore our van options</h1>
+            <div className="van-list">
+                {vanElements}
             </div>
         </div>
     )
